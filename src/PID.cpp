@@ -167,26 +167,43 @@ T PIDController<T>::tick()
        * is taken.
        */
       float regErr = target - currentFeedback;
-      float altErr1 = (target - feedbackWrapLowerBound) + (feedbackWrapUpperBound - currentFeedback);
-      float altErr2 = (feedbackWrapUpperBound - target) + (currentFeedback - feedbackWrapLowerBound);
+      // float altErr1 = (target - feedbackWrapLowerBound) + (feedbackWrapUpperBound - currentFeedback);
+      // float altErr2 = (feedbackWrapUpperBound - target) + (currentFeedback - feedbackWrapLowerBound);
 
-      //Calculate the absolute values of each error.
-      float regErrAbs = (regErr >= 0) ? regErr : -regErr;
-      float altErr1Abs = (altErr1 >= 0) ? altErr1 : -altErr1;
-      float altErr2Abs = (altErr2 >= 0) ? altErr2 : -altErr2;
+      // //Calculate the absolute values of each error.
+      // float regErrAbs = (regErr >= 0) ? regErr : -regErr;
+      // float altErr1Abs = (altErr1 >= 0) ? altErr1 : -altErr1;
+      // float altErr2Abs = (altErr2 >= 0) ? altErr2 : -altErr2;
 
-      //Use the error with the smallest absolute value
-      if(regErrAbs <= altErr1Abs && regErrAbs <= altErr2Abs) //If reguErrAbs is smallest
+      // //Use the error with the smallest absolute value
+      // if(regErrAbs <= altErr1Abs && regErrAbs <= altErr2Abs) //If reguErrAbs is smallest
+      // {
+      //   error = regErr;
+      // }
+      // else if(altErr1Abs < regErrAbs && altErr1Abs < altErr2Abs) //If altErr1Abs is smallest
+      // {
+      //   error = altErr1Abs;
+      // }
+      // else if(altErr2Abs < regErrAbs && altErr2Abs < altErr1Abs) //If altErr2Abs is smallest
+      // {
+      //   error = altErr2Abs;
+      // }
+
+      if (abs(regErr) > (feedbackWrapUpperBound - feedbackWrapLowerBound)/2)
       {
-        error = regErr;
+       
+        if(regErr > 0)
+        {
+          error = (feedbackWrapLowerBound - currentFeedback) + (target - feedbackWrapUpperBound);
+        }
+        else
+        {
+          error = (feedbackWrapUpperBound - currentFeedback) + (target - feedbackWrapLowerBound);
+        }
       }
-      else if(altErr1Abs < regErrAbs && altErr1Abs < altErr2Abs) //If altErr1Abs is smallest
+      else
       {
-        error = altErr1Abs;
-      }
-      else if(altErr2Abs < regErrAbs && altErr2Abs < altErr1Abs) //If altErr2Abs is smallest
-      {
-        error = altErr2Abs;
+         error = target - currentFeedback;
       }
     }
     else
