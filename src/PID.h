@@ -1,8 +1,6 @@
-#ifndef PID_H
-#define PID_H
-#endif
-#include <functional>
+#pragma once
 
+#include <functional>
 template <class T>
 class PIDController
 {
