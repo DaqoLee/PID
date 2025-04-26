@@ -7,6 +7,7 @@ class PIDController
 public:
   PIDController(double p, double i, double d, std::function<T()> pidSource, std::function<void(T output)> pidOutput);
   T tick();
+  T tick(T c, T t);
   void setTarget(T t);
   T getTarget();
   T getOutput();
