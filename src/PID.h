@@ -6,6 +6,8 @@ class PIDController
 {
 public:
   PIDController(double p, double i, double d, std::function<T()> pidSource, std::function<void(T output)> pidOutput);
+  PIDController(double p, double i, double d);
+  PIDController();
   T tick();
   T tick(T c, T t);
   void setTarget(T t);

@@ -100,6 +100,75 @@
    _pidSource.swap(pidSource);
    _pidOutput.swap(pidOutput);
  }
+
+  /**
+  * Constructs the PIDController object with PID Gains and function pointers
+  * for retrieving feedback (pidSource) and delivering output (pidOutput).
+  * All PID gains should be positive, otherwise the system will violently diverge
+  * from the target.
+  * @param p The Proportional gain.
+  * @param i The Integral gain.
+  * @param d The Derivative gain.
+  */
+ template <class T>
+ PIDController<T>::PIDController(double p, double i, double d)
+ {
+   _p = p;
+   _i = i;
+   _d = d;
+   target = 0;
+   output = 0;
+   enabled = true;
+   currentFeedback = 0;
+   lastFeedback = 0;
+   error = 0;
+   lastError = 0;
+   currentTime = 0L;
+   lastTime = 0L;
+   integralCumulation = 0;
+   maxCumulation = 30000;
+   cycleDerivative = 0;
+ 
+   inputBounded = false;
+   inputLowerBound = 0;
+   inputUpperBound = 0;
+   outputBounded = false;
+   outputLowerBound = 0;
+   outputUpperBound = 0;
+   feedbackWrapped = false;
+ 
+   timeFunctionRegistered = false;
+
+ }
+
+ template <class T>
+ PIDController<T>::PIDController()
+ {
+   target = 0;
+   output = 0;
+   enabled = true;
+   currentFeedback = 0;
+   lastFeedback = 0;
+   error = 0;
+   lastError = 0;
+   currentTime = 0L;
+   lastTime = 0L;
+   integralCumulation = 0;
+   maxCumulation = 30000;
+   cycleDerivative = 0;
+ 
+   inputBounded = false;
+   inputLowerBound = 0;
+   inputUpperBound = 0;
+   outputBounded = false;
+   outputLowerBound = 0;
+   outputUpperBound = 0;
+   feedbackWrapped = false;
+ 
+   timeFunctionRegistered = false;
+
+ }
+ 
  
  /**
   * This method uses the established function pointers to retrieve system
@@ -524,7 +593,7 @@
    }
  
    //If the new max is not more than 1 then the cumulation is useless.
-   if(max > 1)
+   //if(max > 1)
    {
      maxCumulation = max;
    }
